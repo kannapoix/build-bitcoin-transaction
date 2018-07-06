@@ -1,0 +1,23 @@
+# sample to_multisig
+version: 1
+input_count: 1
+input:
+  - prev_txid: 407bab5a582256e5d646543b8476587ddbc74138457eb8cf473853f52fd7c8c6
+    prev_output_index: 0
+    prev_pubkey_script: 76a914f332bb93d6ccef32bd6cbc17893cdef20e02623e88ac
+    signer:
+      - n3gsGe6GkoAKtxGNn2uYV4dmD91rgHYTKb
+output_count: 2
+output:
+    - multisig: 'OP_2 pubkeys OP_3 OP_CHECKMULTISIG'
+      address:
+        - mgAHshnBUzkPtEh1LfpkwMW1afteqsJ5dU
+        - mpS59EaspPEFLzZfJ16rFjGfZ2BBPwePzB
+        - mpuvwgaGwD5KJUidhi5VQ365ofbne9jruV
+      consume: 4900000000
+    - p2pkh: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
+      address:
+        - mpuvwgaGwD5KJUidhi5VQ365ofbne9jruV
+      consume: 99900000
+locktime: "00000000"
+hash_code: 1

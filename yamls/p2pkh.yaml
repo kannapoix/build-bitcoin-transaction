@@ -1,0 +1,21 @@
+# sample p2pkh
+version: 1
+input_count: 1
+input:
+  - prev_txid: 022d3e52597758f2673e6a9df38679da506701cadf34e4b775bcfdb207f9410d
+    prev_output_index: 0
+    prev_pubkey_script: 76a9148e07809beb15552d61426b55e470710aaf8f7b3288ac
+    signer:
+      - mtTwEZvHZZEM4p7pPjt8aP5nVFLGQRLmLL
+output_count: 2
+output:
+  - script: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
+    address:
+      - n3RmJk6PNT8tLF6uUrMQLVgeSAqL5QBVYH
+    consume: 4800000000
+  - script: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
+    address:
+      - mvc25Aqkj5mg54GktDqije1dvfbuZkhDSp
+    consume: 99900000
+locktime: "00000000"
+hash_code: 1

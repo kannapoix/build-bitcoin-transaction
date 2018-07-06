@@ -1,0 +1,25 @@
+GIT
+  remote: https://github.com/lian/bitcoin-ruby
+  revision: a3fffe07505ea8e0c11dac548ae0dda0f8168f12
+  branch: master
+  specs:
+    bitcoin-ruby (0.0.18)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ffi (1.9.25)
+    power_assert (1.1.2)
+    test-unit (3.2.8)
+      power_assert
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bitcoin-ruby!
+  ffi
+  test-unit
+
+BUNDLED WITH
+   1.16.1

@@ -1,0 +1,20 @@
+# sample to_p2wpkh
+version: 1
+input_count: 1
+input:
+  - prev_txid: 6974aba3ff3dad308c69fd9068ca63c832c940298e0adf07a9bc117e3b36f03b
+    prev_output_index: 0
+    prev_pubkey_script: 76a9140ad51c6d1d8ef068f7c59a041797514430295d5588ac
+    signer:
+      - mgWEMBoDoEAP2pM9hAWv9XLgkfucGuQCTb
+output_count: 2
+output:
+  - p2sh: 'OP_HASH160 redeem_script_hash OP_EQUAL'
+    address:
+      - n1M4z7KZNgKijCv6Vv49WmKeErKxC8Nnfe
+      - mgmV9dy93W1m3pCyGY6P7PcB51s2c61Nvb
+      - mzZUtTEeGurEaSsUwsLVJsrtDUS72GDRC4
+    consume: 4800000000
+    multisig_script: 'OP_2 pubkeys OP_3 OP_CHECKMULTISIG'
+locktime: "00000000"
+hash_code: 1

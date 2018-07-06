@@ -1,0 +1,22 @@
+# sample p2sh
+version: 1
+input_count: 1
+input:
+  - prev_txid: 5ec3b4e6b8a529af883d02d479f3e2ffbb7253e8697db2a004138cc80392d499
+    prev_output_index: 0
+    prev_pubkey_script: 5221027c3092032ec2a8ca38ac045d6cafe2c35afac9d8f5e067193058b90b4bb503fb2102a0e7517ca65f1fb1de4588f16b7d041d726376ab4a8536d14755f29de9b9962e21030aba239abef976fe4c5fa429bc0880628747187406721d98c5fc50d481c8df9153ae
+    signer:
+      - mtHCU6GJv9cLGXXzXb62WN1kAovhfVx2UR
+      - mpK1ER1iGiiCDqiSfjwnLKdymU1X6GoXzd
+output_count: 2
+output:
+    - p2pkh: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
+      address:
+        - mfph1PcR7mt2vgrUJ7YuPB81ssx9fe8ryC
+      consume: 4700000000
+    - p2pkh: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
+      address:
+        - mjzc2afaUawu2BRV6sXmgN5t25JF3gf5PL
+      consume: 99900000
+locktime: "00000000"
+hash_code: 1

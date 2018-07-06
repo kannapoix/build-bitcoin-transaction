@@ -1,0 +1,24 @@
+# sample p2sh
+version: 1
+input_count: 1
+input:
+  - prev_txid: 88b1f4851193b1de9e559e9bd50b62d558c03ca8fbe771d9408aac82d0ca7a65
+    prev_output_index: 1
+    prev_pubkey_script: 76a91487870a9df21f077a73fc18d6985b6b201b0c489688ac
+    signer:
+      - mssZHoBozL1qV29AuKNYEt2UKRX8hNzkRn
+output_count: 2
+output:
+  - p2sh: 'OP_HASH160 redeem_script_hash OP_EQUAL'
+    address:
+      - mtHCU6GJv9cLGXXzXb62WN1kAovhfVx2UR
+      - mpK1ER1iGiiCDqiSfjwnLKdymU1X6GoXzd
+      - mqbUwyyRqrggX8uTFXLUF4UfzbyMqshnF1
+    consume: 4800000000
+    multisig_script: 'OP_2 pubkeys OP_3 OP_CHECKMULTISIG'
+  - p2pkh: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
+    address:
+      - myXTmtuYpzuTQDiTSD81saEAQh52bZCDc5
+    consume: 99900000
+locktime: "00000000"
+hash_code: 1
