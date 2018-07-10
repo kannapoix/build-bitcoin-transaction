@@ -2,20 +2,16 @@
 version: 1
 input_count: 1
 input:
-  - prev_txid: 022d3e52597758f2673e6a9df38679da506701cadf34e4b775bcfdb207f9410d
+  - prev_txid: d651820a8718f83ae97fe5e6554798c069868a172477909a92460ca27fd7aa2f
     prev_output_index: 0
-    prev_pubkey_script: 76a9148e07809beb15552d61426b55e470710aaf8f7b3288ac
+    prev_pubkey_script: 76a914352fd6937e24d9de927b857e5d8ea9e3a8fe8f9188ac
     signer:
-      - mtTwEZvHZZEM4p7pPjt8aP5nVFLGQRLmLL
+      - mkNBR5PyMTdhWtKopfSeXigS1p7QAD8f4h
 output_count: 2
 output:
-  - script: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
+  - p2pkh: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
     address:
-      - n3RmJk6PNT8tLF6uUrMQLVgeSAqL5QBVYH
-    consume: 4800000000
-  - script: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
-    address:
-      - mvc25Aqkj5mg54GktDqije1dvfbuZkhDSp
-    consume: 99900000
+      - msvkJkuUpcH51VodGDXtv48z58Y1udgUKb
+    consume: 20
 locktime: "00000000"
 hash_code: 1
