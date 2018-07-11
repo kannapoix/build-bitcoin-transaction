@@ -7,11 +7,11 @@ input:
     prev_pubkey_script: 76a914352fd6937e24d9de927b857e5d8ea9e3a8fe8f9188ac
     signer:
       - mkNBR5PyMTdhWtKopfSeXigS1p7QAD8f4h
-output_count: 2
+output_count: 1
 output:
   - p2pkh: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
     address:
       - msvkJkuUpcH51VodGDXtv48z58Y1udgUKb
-    consume: 20
+    consume: 2000000000
 locktime: "00000000"
 hash_code: 1
