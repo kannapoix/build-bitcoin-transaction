@@ -80,8 +80,8 @@ data['input'].each do |hash|
     sender_key_obj = address2keyobject signer
     sig_obj = Signature.new(sender_key_obj.priv)
     if !sig_obj.sign(hashed_pre_sign).to_hash.bip62.der_check then
-      p 'der check failed'
-      exit
+      STDERR.puts 'der check failed'
+      exit(false)
     end
     signature = int2hex(hex_bytesize(sig_obj.signature)) + sig_obj.signature + int2hex(hex_bytesize(sender_key_obj.pub)) + sender_key_obj.pub
     script_sig.push(signature)
