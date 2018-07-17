@@ -11,34 +11,55 @@ str  = ARGF.read()
 data = YAML.load(str)
 
 Bitcoin.network = :regtest
+#
+# segwit = Segwit.new
+# txin = Txin.build do |input|
+#   data['input'].each do |list|
+#     input.prev_txid = list['prev_txid']
+#     input.prev_output_index = list['prev_output_index'][0]
+#   end
+# end
+# # segwit
+# segwit.prev_outpoint_serialize(txin).hash_prevoutpoints
+# segwit.prev_sequence_serialize(txin).hash_sequence
+#
+# txouts = []
+# data['output'].each do |d|
+#   txout = Txout.build do |output|
+#     output.consume = d['consume']
+#     output.script = Script.new.script(d)
+#   end
+#   # segwit
+#   segwit.output_serialize(txout).hash_output
+#   txouts.push(txout)
+# end
 
-segwit = Segwit.new
+# tx = Tx.build do |tx|
+#   tx.version = data['version']
+#   tx.locktime = data['locktime']
+#   tx.hash_code = data['hash_code']
+#   tx.input_count = data['input_count']
+#   tx.output_count = data['output_count']
+#   tx.in = txins
+#   tx.out = txouts
+# end
 txins = []
-n = 0
-data['input'].each do |list|
-  txin = Txin.build do |input|
+txin = Txin.build do |input|
+  data['input'].each do |list|
     input.prev_txid = list['prev_txid']
     input.prev_output_index = list['prev_output_index'][0]
   end
-  # segwit
-  segwit.prev_outpoint_serialize(txin).hash_prevoutpoints
-  segwit.prev_sequence_serialize(txin).hash_sequence
-
-  txins.push(txin)
-  n += 1
 end
-txins[0].pack
+txins.push txin
 
 txouts = []
-data['output'].each do |d|
-  txout = Txout.build do |output|
+txout = Txout.build do |output|
+  data['output'].each do |d|
     output.consume = d['consume']
     output.script = Script.new.script(d)
   end
-  # segwit
-  segwit.output_serialize(txout).hash_output
-  txouts.push(txout)
 end
+txouts.push txout
 
 tx = Tx.build do |tx|
   tx.version = data['version']

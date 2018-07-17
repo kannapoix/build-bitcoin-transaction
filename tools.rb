@@ -82,16 +82,30 @@ module Util
 end
 
 class Segwit
-  attr_reader :serialized_prev_outpoint, :hash_prevouts, :hash_sequence, :hash_output, :serialized_prev_sequence
+  attr_reader :serialized_prev_outpoint, :hash_prevouts, :hash_sequence, :hash_output, :serialized_prev_sequence, :prev_txid
+  attr_writer :tx, :txin, :txout
 
   def initialize
+    @version = '01000000'
+    @sequence = 'ffffffff'
+    @locktime = '00000000'
+    @hash_type = '01000000'
     @serialized_prev_outpoint = []
     @serialized_output = []
     @serialized_prev_sequence = []
   end
 
-  def prev_outpoint_serialize txin
-    prev_outpoint = txin.prev_txid + txin.prev_output_index
+  def self.build
+    segwit = self.new
+    yield segwit
+    segwit.prev_outpoint_serialize.hash_prevoutpoints
+    segwit.prev_sequence_serialize.hash_sequence
+    segwit.output_serialize.hash_output
+    segwit
+  end
+
+  def prev_outpoint_serialize
+    prev_outpoint = @txin.prev_txid + @txin.prev_output_index
     @serialized_prev_outpoint.push(prev_outpoint)
     self
   end
@@ -100,9 +114,9 @@ class Segwit
     @hash_prevouts = double_sha256(@serialized_prev_outpoint.join)
   end
 
-  def prev_sequence_serialize txin
-    p "prev_sequenc: #{txin.sequence}"
-    @serialized_prev_sequence.push(txin.sequence)
+  def prev_sequence_serialize
+    p "prev_sequenc: #{@txin.sequence}"
+    @serialized_prev_sequence.push(@txin.sequence)
     self
   end
 
@@ -110,16 +124,25 @@ class Segwit
     @hash_sequence = double_sha256(@serialized_prev_sequence.join)
   end
 
-  def output_serialize txout
-    p "output: #{txout.consume + txout.script}"
-    script = txout.script
-    @serialized_output.push(txout.consume + int2hex(hex_bytesize(script)) + script)
+  def output_serialize
+    p "output: #{@txout.consume + @txout.script}"
+    script = @txout.script
+    @serialized_output.push(@txout.consume + int2hex(hex_bytesize(script)) + script)
     self
   end
 
   def hash_output
     p "output: #{@serialized_output.join}"
     @hash_output = double_sha256(@serialized_output.join)
+  end
+
+  def p2wpkh_script_code_from_address=(signer)
+    pubkey_hash = HASH160(address2keyobject(signer).pub)
+    @script_code = "1976a914#{pubkey_hash}88ac"
+  end
+
+  def pack
+    p [@tx.version, @hash_prevouts, @hash_sequence, @serialized_prev_outpoint[0], @script_code, @txout.consume, @sequence, @hash_output, @tx.locktime, @tx.hash_code].join
   end
 end
 
