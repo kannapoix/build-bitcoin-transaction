@@ -86,10 +86,6 @@ class Segwit
   attr_writer :tx, :txin, :txout
 
   def initialize
-    @version = '01000000'
-    @sequence = 'ffffffff'
-    @locktime = '00000000'
-    @hash_type = '01000000'
     @serialized_prev_outpoint = []
     @serialized_output = []
     @serialized_prev_sequence = []
@@ -147,7 +143,7 @@ class Segwit
 end
 
 class Tx
-  attr_accessor :in, :out, :version, :locktime, :hash_code, :input_count, :output_count
+  attr_accessor :in, :out, :version, :locktime, :hash_code, :input_count, :output_count, :segwit
   def serialize
     self.pack
   end
