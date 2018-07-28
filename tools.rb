@@ -37,7 +37,7 @@ module Util
   # double hash payload
   #
   # @param payload [string] hex string
-  # @return hex string
+  # @return [string] hex string
   def double_sha256 payload
     OpenSSL::Digest::SHA256.hexdigest([OpenSSL::Digest::SHA256.hexdigest([payload].pack("H*"))].pack("H*"))
   end
@@ -82,7 +82,8 @@ module Util
 end
 
 class Segwit
-  attr_reader :serialized_prev_outpoint, :hash_prevouts, :hash_sequence, :hash_output, :serialized_prev_sequence, :prev_txid
+  attr_accessor :hash_preimage
+  attr_reader :hash_prevouts, :hash_output, :hash_sequence, :prev_txid, :serialized_prev_outpoint, :serialized_prev_sequence
   attr_writer :tx, :txin, :txout
 
   def initialize
@@ -90,14 +91,25 @@ class Segwit
     @serialized_output = []
     @serialized_prev_sequence = []
   end
-
-  def self.build
+  
+  def self.prepare
     segwit = self.new
     yield segwit
     segwit.prev_outpoint_serialize.hash_prevoutpoints
     segwit.prev_sequence_serialize.hash_sequence
     segwit.output_serialize.hash_output
+    segwit.hash_preimage = segwit.pack.join
     segwit
+  end
+
+  def build version = '01000000', marker = '00', flag = '01', locktime = '00000000'
+    tx = []
+    tx.push version
+    tx.push marker
+    tx.push flag
+    yield tx
+    tx.push locktime
+    tx
   end
 
   def prev_outpoint_serialize
@@ -111,7 +123,6 @@ class Segwit
   end
 
   def prev_sequence_serialize
-    p "prev_sequenc: #{@txin.sequence}"
     @serialized_prev_sequence.push(@txin.sequence)
     self
   end
@@ -121,14 +132,12 @@ class Segwit
   end
 
   def output_serialize
-    p "output: #{@txout.consume + @txout.script}"
     script = @txout.script
     @serialized_output.push(@txout.consume + int2hex(hex_bytesize(script)) + script)
     self
   end
 
   def hash_output
-    p "output: #{@serialized_output.join}"
     @hash_output = double_sha256(@serialized_output.join)
   end
 
@@ -138,7 +147,7 @@ class Segwit
   end
 
   def pack
-    p [@tx.version, @hash_prevouts, @hash_sequence, @serialized_prev_outpoint[0], @script_code, @txout.consume, @sequence, @hash_output, @tx.locktime, @tx.hash_code].join
+    [@tx.version, @hash_prevouts, @hash_sequence, @serialized_prev_outpoint[0], @script_code, @txout.consume, @serialized_prev_sequence[0], @hash_output, @tx.locktime, @tx.hash_code]
   end
 end
 
@@ -345,6 +354,9 @@ class Signature
     @sighash = "01"
   end
 
+  # make signature
+  # @param data [string] hex string
+  # @return [Signature]
   def sign data
     sigobj = OpenSSL::PKey::EC.new('secp256k1')
     sigobj.private_key = OpenSSL::BN.new(@priv_key, 16)
