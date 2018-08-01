@@ -1,3 +1,5 @@
+require 'openssl'
+
 module Util
   # big endien to little endien
   #
@@ -91,7 +93,7 @@ class Segwit
     @serialized_output = []
     @serialized_prev_sequence = []
   end
-  
+
   def self.prepare
     segwit = self.new
     yield segwit
@@ -252,11 +254,11 @@ class Txout < Tx
     output
   end
 
-  def consume=(amount)
+  def consume= amount
     @consume = to_little sprintf("%016X", amount) # 8 bytes
   end
 
-  def pubkey_script=(address)
+  def pubkey_script= address
     key_obj = address2keyobject address
   end
 
