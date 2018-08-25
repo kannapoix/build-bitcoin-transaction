@@ -51,7 +51,7 @@ module Util
   # @param [String] address
   # @return [Bitcoin::Key]
   def address2keyobject address
-    priv_wif = `~/bitcoin/src/bitcoin-cli dumpprivkey #{address}`.chomp
+    priv_wif = `~/coding/bitcoin/bitcoin/src/bitcoin-cli dumpprivkey #{address}`.chomp
     Bitcoin::Key.from_base58(priv_wif)
   end
 
@@ -82,7 +82,7 @@ end
 class Segwit
   attr_accessor :hash_preimage
   attr_reader :hash_prevouts, :hash_output, :hash_sequence, :prev_txid, :serialized_prev_outpoint, :serialized_prev_sequence
-  attr_writer :tx, :txin, :txout
+  attr_writer :tx, :txin, :txout, :script_code
 
   def initialize
     @serialized_prev_outpoint = []
@@ -151,6 +151,8 @@ class Segwit
     @script_code = "1976a914#{witness_script}88ac"
   end
 
+  def pack #hash_preimage
+    [@tx.version, @hash_prevouts, @hash_sequence, @serialized_prev_outpoint[0], @script_code, @prevout, @serialized_prev_sequence[0], @hash_output, @tx.locktime, @tx.hash_code]
   end
 end
 
