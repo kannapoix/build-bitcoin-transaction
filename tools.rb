@@ -2,25 +2,22 @@ require 'openssl'
 
 module Util
   # big endien to little endien
-  #
-  # @param hex_string [string] hex string
-  # @return [str] hex string
+  # @param [String] hex_string
+  # @return [String]
   def to_little hex_string
     [hex_string].pack('H*').reverse.unpack('H*').first
   end
 
   # calcurate bytesize of hex
-  #
-  # @param hex [string]
-  # @return [int]
+  # @param [String] hex
+  # @return [Integer]
   def hex_bytesize hex
     [hex].pack("H*").bytesize
   end
 
   # convert integer to hex string
-  #
-  # @param integer [int]
-  # @return [string] hex string
+  # @param [Integer] integer
+  # @return [String]
   def int2hex integer
     integer.to_s(16)
   end
@@ -37,24 +34,21 @@ module Util
   end
 
   # double hash payload
-  #
-  # @param payload [string] hex string
-  # @return [string] hex string
+  # @param [String] payload
+  # @return [String]
   def double_sha256 payload
     OpenSSL::Digest::SHA256.hexdigest([OpenSSL::Digest::SHA256.hexdigest([payload].pack("H*"))].pack("H*"))
   end
 
   # sha256 and ripimd160
-  #
-  # @param payload [string] hex string
-  # @return hex string
+  # @param [String] payload
+  # @return [String]
   def HASH160 payload
     OpenSSL::Digest::RIPEMD160.hexdigest([OpenSSL::Digest::SHA256.hexdigest([payload].pack("H*"))].pack("H*"))
   end
 
   # address to bitcoin-ruby key object
-  #
-  # @param address [string]
+  # @param [String] address
   # @return [Bitcoin::Key]
   def address2keyobject address
     priv_wif = `~/bitcoin/src/bitcoin-cli dumpprivkey #{address}`.chomp
@@ -73,6 +67,8 @@ module Util
   end
 
   # fill first 0.5 byte with zero if number of characters of signature is odd.
+  # @param [String] string
+  # @return [String]
   def fill_zero string
     if string.size % 2 != 0
       string = '0' + string
@@ -143,13 +139,18 @@ class Segwit
     @hash_output = double_sha256(@serialized_output.join)
   end
 
-  def p2wpkh_script_code_from_address=(signer)
-    pubkey_hash = HASH160(address2keyobject(signer).pub)
-    @script_code = "1976a914#{pubkey_hash}88ac"
+  # @param amount [int] satoshi
+  # @return [String]
+  def prevout=(amount)
+    @prevout = [amount].pack('Q').unpack 'H*'
   end
 
-  def pack
-    [@tx.version, @hash_prevouts, @hash_sequence, @serialized_prev_outpoint[0], @script_code, @txout.consume, @serialized_prev_sequence[0], @hash_output, @tx.locktime, @tx.hash_code]
+  # @param [String] witness_script witness program without version and script size. e.g.4873d013a8b12c1da4d853eb9268b43f9feecf29
+  # @return [String] script code
+  def p2wpkh_script_code=(witness_script)
+    @script_code = "1976a914#{witness_script}88ac"
+  end
+
   end
 end
 
@@ -178,9 +179,8 @@ class Tx
   end
 
   # integer to 4 bytes hex string
-  #
-  # @param vaersion [int]
-  # @return [string] hex string
+  # @param [Integer] version
+  # @return [String] hex string
   def version=(version)
     @version = to_little(sprintf('%08X',  version)) #4bytes
   end
@@ -254,6 +254,8 @@ class Txout < Tx
     output
   end
 
+  # @param [Integer] amount
+  # @return [String]
   def consume= amount
     @consume = to_little sprintf("%016X", amount) # 8 bytes
   end
@@ -353,11 +355,11 @@ class Signature
 
   def initialize priv_key
     @priv_key = priv_key
-    @sighash = "01"
+    @sighash = '01'
   end
 
   # make signature
-  # @param data [string] hex string
+  # @param data [String] hex string
   # @return [Signature]
   def sign data
     sigobj = OpenSSL::PKey::EC.new('secp256k1')
