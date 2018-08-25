@@ -2,20 +2,20 @@
 version: 1
 input_count: 1
 input:
-  - prev_txid: 92be89923c4dc55bcfacf4c1f54ce6075116a5d342074e8db1f1291dcc472f06
+  - prev_txid: b82ef5d4c0cd2f013e14fa0bf45b163c7331ffbec70864f6087cb89c05e4ab71
     prev_output_index: 0
-    prev_pubkey_script: 001487214997be56b0eb38274f082e45d68495b29136
+    prev_pubkey_script: 00144873d013a8b12c1da4d853eb9268b43f9feecf29
     signer:
-      - bcrt1qsus5n9a726cwkwp8fuyzu3wksj2m9yfked5anj
-output_count: 2
+      - bcrt1qvlrd7upz8g70hujpua23q4cqzuraw2he97gtyc
+output_count: 1
 output:
   - p2pkh: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
     address:
-      - moCBqrcpM9e98yiTFLeqgvam3BQyQuxHcj
-    consume: 4899900000
-  # - p2pkh: 'OP_DUP OP_HASH160 pubkey_hash OP_EQUALVERIFY OP_CHECKSIG'
-  #   address:
-  #     - mqXWSgH9yboueN91dgrDssyTBU8pQuscTN
-  #   consume: 99900000
+      - mhLEML4bSXNfFZkrhKd1dKVw76FFzQW3jD
+    consume: 1990000000
 locktime: "00000000"
 hash_code: 1
+
+# "privkey: 8e9cb12b60004c08af0092fe07e14ec94675d8ed3e9fb8b0724c1260b4656a00"
+# "pubkey: 03aa81739ee5cc85e6802b0e1447b21ce665a96f88056375e2f8b9e1f59e096670"
+# "address: bcrt1pqw4gzuu7uhxgte5q9v8pg3ajrnnxt2t03qzkxa0zlzu7rav7p9n8q3q87gz"

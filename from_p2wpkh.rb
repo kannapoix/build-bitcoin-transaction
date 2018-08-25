@@ -3,12 +3,22 @@ require 'bitcoin'
 require 'ffi'
 require './tools.rb'
 require 'yaml'
+
+include Bitcoin::Util
 include Util
 
 str  = ARGF.read()
 data = YAML.load(str)
 
 Bitcoin.network = :regtest
+
+signer_wif = 'cPN7UjEySEVfHftqV8PYJeZRsBDRZEEWj4yMrTJwCTTDiDXp8EV8'
+signer = Bitcoin::Key.from_base58(signer_wif)
+prevout = 1999000000
+
+send_to = 'cTG9tQQhZrjfJYw3TewmVRVhE4kScyNL3fCDL1YXQuGGtghsH1xe'
+reciever = Bitcoin::Key.from_base58(send_to)
+pubkey_hash = hash160 reciever.addr
 
 txins = []
 txin = Txin.build do |input|
@@ -42,24 +52,22 @@ segwit = Segwit.prepare do |segwit|
   segwit.tx = tx
   segwit.txin = txin
   segwit.txout = txout
-  segwit.p2wpkh_script_code_from_address = data['input'][0]['signer'][0]
+  segwit.prevout = prevout
+  segwit.p2wpkh_script_code = '4873d013a8b12c1da4d853eb9268b43f9feecf29'
 end
+sig_hash = double_sha256(segwit.hash_preimage)
 
-hashed_pre_sign = double_sha256(segwit.hash_preimage)
 script_sig = []
 
 #to p2sh, p2pkh
 data['input'].each do |hash|
-  hash['signer'].each do |signer|
-    sender_key_obj = address2keyobject signer
-    sig_obj = Signature.new(sender_key_obj.priv)
-    if !sig_obj.sign(hashed_pre_sign).to_hash.bip62.der_check then
-      STDERR.puts 'der check failed'
-      exit(false)
-    end
-    signature = int2hex(hex_bytesize(sig_obj.signature)) + sig_obj.signature + int2hex(hex_bytesize(sender_key_obj.pub)) + sender_key_obj.pub
-    script_sig.push(signature)
+  sig_obj = Signature.new(signer.priv)
+  if !sig_obj.sign(sig_hash).to_hash.bip62.der_check then
+    STDERR.puts 'der check failed'
+    exit(false)
   end
+  signature = int2hex(hex_bytesize(sig_obj.signature)) + sig_obj.signature + int2hex(hex_bytesize(signer.pub)) + signer.pub
+  script_sig.push(signature)
 end
 
 final_tx = segwit.build do |final_tx|
